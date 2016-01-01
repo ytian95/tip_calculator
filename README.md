@@ -31,9 +31,10 @@ Here's a walkthrough of implemented user stories:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
-Swift and use of Xcode
-The structure, used to android application structure, so the way that build ios is different, and confused me
-Describe any challenges encountered while building the app.
+
+I am not familiar with Objective C, so learning Swift was a bit of a learning curve, especially when dealing with implicit and explicit typing, and when to use ? vs ! with variables. There was a lot of syntax similar to Python, so I tried to build up from that.
+
+Having written android applications before, I was suprised that building iOS apps was a different experience. I expected to start with the basic fundamental structure before moving onto the mockup. Though that may have been the way of how I learned Android. I was mostly surprised at the lack of explicit coding, especially when connecting outlets and sangues. With Android, each listener had to be written out explicitly.
 
 ## License
 
