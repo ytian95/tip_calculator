@@ -23,7 +23,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
         tipLabel.text = "$0.00"
         totalLabel.text = "$0.00"
         billField.text = "$"
@@ -43,9 +42,13 @@ class ViewController: UIViewController {
         
         let tip = billAmount * tipPercent
         let total = billAmount + tip
-        print(billAmount)
+        
         tipLabel.text = String(format: "$%.2f", tip)
         totalLabel.text = String(format: "$%.2f", total)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(billField.text, forKey: "default_amount_value")
+        defaults.synchronize()
         
         if self.calculatedView.alpha == 0 {
             UIView.animateWithDuration(0.4, animations: {
@@ -75,10 +78,17 @@ class ViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         let defaults = NSUserDefaults.standardUserDefaults()
+        
+        let nowTime = NSDate().timeIntervalSince1970
+        var thenTime: Double = 0.0
+        
+        if let testTime : Double? = defaults.doubleForKey("time_since_exit") {
+            print("got then time")
+            print(testTime)
+            thenTime = testTime!
+        }
         if let testArray = defaults.objectForKey("tip_percent_list") {
-            print(testArray)
             tipPercentList = testArray as! [Double]
-            
         }
         if let testIndex : Int? = defaults.integerForKey("default_tip_percentage_index"){
             tipPercentControl.selectedSegmentIndex = testIndex!
@@ -90,6 +100,16 @@ class ViewController: UIViewController {
             tipPercentControl.setTitle(valueName, forSegmentAtIndex: i)
         }
         
+        let elapsedTimeInMin = (nowTime - thenTime)/1000/60
+        print("elapsed min time")
+        print(elapsedTimeInMin)
+        if elapsedTimeInMin < 10.0 {
+            if let testAmount = defaults.objectForKey("default_amount_value") {
+                billField.text = testAmount as? String
+            }
+        }
+        
+        billField.reloadInputViews()
         onEditingChanged([]) //update from when return from settings
     }
     
@@ -99,6 +119,12 @@ class ViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        let time = NSDate().timeIntervalSince1970
+        print("then time")
+        print(time)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setDouble(time, forKey: "time_since_exit")
+        defaults.synchronize()
     }
     
     override func viewDidDisappear(animated: Bool) {

@@ -80,7 +80,6 @@ class SettingsViewController: UIViewController {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         if let testArray = defaults.objectForKey("tip_percent_list") {
-            print(testArray)
             tipPercentages = testArray as! [Double]
             
         }
