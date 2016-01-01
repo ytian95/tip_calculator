@@ -14,9 +14,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var billField: UITextField!
     @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
+    
     var isFirstTime = true
     var tipPercentList = [0.1, 0.15, 0.2]
 
+    @IBOutlet weak var calculatedView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -43,6 +46,12 @@ class ViewController: UIViewController {
         print(billAmount)
         tipLabel.text = String(format: "$%.2f", tip)
         totalLabel.text = String(format: "$%.2f", total)
+        
+        if self.calculatedView.alpha == 0 {
+            UIView.animateWithDuration(0.4, animations: {
+                self.calculatedView.alpha = 1
+            })
+        }
     }
     
     @IBAction func onTap(sender: AnyObject) {
@@ -50,12 +59,16 @@ class ViewController: UIViewController {
         
         if billField.text == "" {
             billField.text = "$"
+            UIView.animateWithDuration(0.4, animations: {
+                self.calculatedView.alpha = 0
+            })
         }
         
     }
     @IBAction func onEditingBegin(sender: AnyObject) {
         if billField.text == "$" {
             billField.text = ""
+            self.calculatedView.alpha = 0
         }
     }
 
