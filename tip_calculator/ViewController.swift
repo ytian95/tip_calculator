@@ -10,9 +10,23 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var tipPercentControl: UISegmentedControl!
+    @IBOutlet weak var billField: UITextField!
+    @IBOutlet weak var tipLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
+    var isFirstTime = true
+    var tipPercentList = [0.1, 0.15, 0.2]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        tipLabel.text = "$0.00"
+        totalLabel.text = "$0.00"
+        billField.text = "$"
+        self.title = "Tips Calculator"
+        
+        billField.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,6 +34,66 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func onEditingChanged(sender: AnyObject) {
+        let tipPercent = tipPercentList[tipPercentControl.selectedSegmentIndex]
+        let billAmount = NSString(string: billField.text!).doubleValue
+        
+        let tip = billAmount * tipPercent
+        let total = billAmount + tip
+        print(billAmount)
+        tipLabel.text = String(format: "$%.2f", tip)
+        totalLabel.text = String(format: "$%.2f", total)
+    }
+    
+    @IBAction func onTap(sender: AnyObject) {
+        view.endEditing(true)
+        
+        if billField.text == "" {
+            billField.text = "$"
+        }
+        
+    }
+    @IBAction func onEditingBegin(sender: AnyObject) {
+        if billField.text == "$" {
+            billField.text = ""
+        }
+    }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        print("view will appear")
+        // This is a good place to retrieve the default tip percentage from NSUserDefaults
+        // and use it to update the tip amount
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let testArray = defaults.objectForKey("tip_percent_list") {
+            print(testArray)
+            tipPercentList = testArray as! [Double]
+            
+        }
+        if let testIndex : Int? = defaults.integerForKey("default_tip_percentage_index"){
+            tipPercentControl.selectedSegmentIndex = testIndex!
+        }
+  
+        for(var i = 0; i < tipPercentList.endIndex; i++){
+            var percent = tipPercentList[i]
+            var valueName = String(format: "%.0f%%", percent * 100)
+            tipPercentControl.setTitle(valueName, forSegmentAtIndex: i)
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        print("view did appear")
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("view will disappear")
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("view did disappear")
+    }
 }
 
