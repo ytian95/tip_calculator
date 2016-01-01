@@ -61,9 +61,6 @@ class ViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        print("view will appear")
-        // This is a good place to retrieve the default tip percentage from NSUserDefaults
-        // and use it to update the tip amount
         let defaults = NSUserDefaults.standardUserDefaults()
         if let testArray = defaults.objectForKey("tip_percent_list") {
             print(testArray)
@@ -75,25 +72,24 @@ class ViewController: UIViewController {
         }
   
         for(var i = 0; i < tipPercentList.endIndex; i++){
-            var percent = tipPercentList[i]
-            var valueName = String(format: "%.0f%%", percent * 100)
+            let percent = tipPercentList[i]
+            let valueName = String(format: "%.0f%%", percent * 100)
             tipPercentControl.setTitle(valueName, forSegmentAtIndex: i)
         }
+        
+        onEditingChanged([]) //update from when return from settings
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        print("view did appear")
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        print("view will disappear")
     }
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        print("view did disappear")
     }
 }
 
